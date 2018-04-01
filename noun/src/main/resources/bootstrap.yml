@@ -1,3 +1,7 @@
 spring:
   application:
     name: noun
+  cloud:
+    config:
+      uri: http://localhost:8080
+      profile: noun
