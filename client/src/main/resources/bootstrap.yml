@@ -2,10 +2,9 @@
 spring:
   application:
     name: client
-
   cloud:
     config:
       uri: http://localhost:8080
 
 server:
-  port: 8002
+  port: 8001

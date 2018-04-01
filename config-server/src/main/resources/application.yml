@@ -3,4 +3,4 @@ spring:
     config:
       server:
         git:
-          uri: http://
+          uri: https://github.com/mwkim0919/ConfigData
