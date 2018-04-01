@@ -15,7 +15,7 @@ import java.util.List;
 public class Controller {
 
     @Autowired
-    private DiscoveryClient client;
+    private RestTemplate restTemplate;
 
     @GetMapping("/sentence")
     public @ResponseBody
@@ -30,12 +30,8 @@ public class Controller {
     }
 
     public String getWord(String service) {
-        List<ServiceInstance> list = client.getInstances(service);
-        if (list != null && list.size() > 0 ) {
-            URI uri = list.get(0).getUri();
-            if (uri !=null ) {
-                return (new RestTemplate()).getForObject(uri,String.class);
-            }
+        if ("ADJECTIVE".equalsIgnoreCase(service)) {
+            return restTemplate.getForObject("http://" + service, String.class);
         }
         return null;
     }
