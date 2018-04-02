@@ -1,5 +1,6 @@
 package com.minwoo.sentence.controllers;
 
+import com.minwoo.sentence.services.SentenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -15,24 +16,19 @@ import java.util.List;
 public class Controller {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private SentenceService sentenceService;
 
     @GetMapping("/sentence")
     public @ResponseBody
     String getSentence() {
         return
-                getWord("SUBJECT") + " "
-                        + getWord("VERB") + " "
-                        + getWord("ARTICLE") + " "
-                        + getWord("ADJECTIVE") + " "
-                        + getWord("NOUN") + "."
+                "<h3>Some Sentences</h3><br/>" +
+                        sentenceService.buildSentence() + "<br/><br/>" +
+                        sentenceService.buildSentence() + "<br/><br/>" +
+                        sentenceService.buildSentence() + "<br/><br/>" +
+                        sentenceService.buildSentence() + "<br/><br/>" +
+                        sentenceService.buildSentence() + "<br/><br/>"
                 ;
     }
 
-    public String getWord(String service) {
-        if ("NOUN".equalsIgnoreCase(service)) {
-            return restTemplate.getForObject("http://" + service, String.class);
-        }
-        return null;
-    }
 }
