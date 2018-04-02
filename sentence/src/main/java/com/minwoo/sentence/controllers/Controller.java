@@ -30,7 +30,7 @@ public class Controller {
     }
 
     public String getWord(String service) {
-        if ("ADJECTIVE".equalsIgnoreCase(service)) {
+        if ("NOUN".equalsIgnoreCase(service)) {
             return restTemplate.getForObject("http://" + service, String.class);
         }
         return null;
