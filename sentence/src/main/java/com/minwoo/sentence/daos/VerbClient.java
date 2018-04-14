@@ -8,4 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface VerbClient {
     @GetMapping("/")
     public Word getWord();
+
+    static class HystrixClientFallback implements VerbClient {
+        @Override
+        public Word getWord() {
+            return new Word();
+        }
+    }
 }

@@ -23,11 +23,11 @@ public class Controller {
     String getSentence() {
         return
                 "<h3>Some Sentences</h3><br/>" +
-                        sentenceService.buildSentence() + "<br/><br/>" +
-                        sentenceService.buildSentence() + "<br/><br/>" +
-                        sentenceService.buildSentence() + "<br/><br/>" +
-                        sentenceService.buildSentence() + "<br/><br/>" +
-                        sentenceService.buildSentence() + "<br/><br/>"
+                        sentenceService.buildSentenceUsingHystrix() + "<br/><br/>" +
+                        sentenceService.buildSentenceUsingHystrix() + "<br/><br/>" +
+                        sentenceService.buildSentenceUsingHystrix() + "<br/><br/>" +
+                        sentenceService.buildSentenceUsingHystrix() + "<br/><br/>" +
+                        sentenceService.buildSentenceUsingHystrix() + "<br/><br/>"
                 ;
     }
 

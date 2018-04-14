@@ -8,4 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface NounClient {
     @GetMapping("/")
     public Word getWord();
+
+    static class HystrixClientFallback implements NounClient {
+        @Override
+        public Word getWord() {
+            return new Word();
+        }
+    }
 }

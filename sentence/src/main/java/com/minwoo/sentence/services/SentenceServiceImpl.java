@@ -13,6 +13,9 @@ public class SentenceServiceImpl implements SentenceService {
     NounClient nounService;
 
     @Autowired
+    private WordService wordService;
+
+    @Autowired
     public void setVerbService(VerbClient verbService) {
         this.verbService = verbService;
     }
@@ -47,6 +50,20 @@ public class SentenceServiceImpl implements SentenceService {
                         articleService.getWord().getString(),
                         adjectiveService.getWord().getString(),
                         nounService.getWord().getString() );
+        return sentence;
+    }
+
+    @Override
+    public String buildSentenceUsingHystrix() {
+        String sentence = "There was a problem assembling the sentence!";
+        sentence =
+                String.format("%s %s %s %s %s.",
+                        wordService.getSubject().getWord(),
+                        wordService.getVerb().getWord(),
+                        wordService.getArticle().getWord(),
+                        wordService.getAdjective().getWord(),
+                        wordService.getNoun().getWord()
+                );
         return sentence;
     }
 }

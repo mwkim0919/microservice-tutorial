@@ -8,4 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface SubjectClient {
     @GetMapping("/")
     public Word getWord();
+
+    static class HystrixClientFallback implements SubjectClient {
+        @Override
+        public Word getWord() {
+            return new Word();
+        }
+    }
 }
