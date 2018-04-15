@@ -3,8 +3,14 @@ package com.minwoo.sentence.services;
 import com.minwoo.sentence.daos.*;
 import com.minwoo.sentence.models.Word;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rx.Observable;
+import rx.Scheduler;
+
+import java.util.concurrent.Executor;
+
 
 @Service
 public class WordServiceImpl implements WordService {
@@ -20,17 +26,30 @@ public class WordServiceImpl implements WordService {
     @Autowired
     NounClient nounClient;
 
+    // For adding Asynchronous Behavior (Reactive)
+    // This improves the performance of the sentence server
+    @Autowired
+    private Executor executor;
+
 
     @Override
     // If this fails due to service not being able, then redirect to the method specified in the annotation
-    @HystrixCommand(fallbackMethod = "getFallbackSubject")
+    @HystrixCommand(
+            fallbackMethod = "getFallbackSubject",
+            commandProperties = {
+                    // Over 20% failure rate in 10 second period, open breaker
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "20"),
+                    // After 1 second, try closing breaker
+                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000")
+            }
+    )
     public Word getSubject() {
         return subjectClient.getWord();
     }
 
     @Override
     public Word getFallbackSubject() {
-        return new Word("Subject Failed");
+        return new Word("Someone", Word.Role.subject);
     }
 
     @Override
@@ -40,9 +59,18 @@ public class WordServiceImpl implements WordService {
         return verbClient.getWord();
     }
 
-    @Override
+//    @Override
+//    // If this fails due to service not being able, then redirect to the method specified in the annotation
+//    @HystrixCommand(fallbackMethod = "getFallbackVerb")
+//    // The following is to make service call async ("reactively")
+//    public Observable<Word> getVerb() {
+//        return Observable.fromCallable(
+//                () -> new Word(verbClient.getWord().getWord(), Word.Role.verb)
+//        ).subscribeOn(Scheduler.from(executor));
+//    }
+
     public Word getFallbackVerb() {
-        return new Word("Verb Failed");
+        return new Word("does", Word.Role.verb);
     }
 
     @Override
@@ -54,7 +82,7 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Word getFallbackArticle() {
-        return new Word("Article Failed");
+        return new Word("Article Failed", Word.Role.article);
     }
 
     @Override
@@ -66,7 +94,7 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Word getFallbackAdjective() {
-        return new Word("Adjective Failed");
+        return new Word("Adjective Failed", Word.Role.adjective);
     }
 
     @Override
@@ -78,7 +106,7 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Word getFallbackNoun() {
-        return new Word("Noun Failed");
+        return new Word("Something", Word.Role.noun);
     }
 
 }

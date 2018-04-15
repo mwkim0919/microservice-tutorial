@@ -58,11 +58,11 @@ public class SentenceServiceImpl implements SentenceService {
         String sentence = "There was a problem assembling the sentence!";
         sentence =
                 String.format("%s %s %s %s %s.",
-                        wordService.getSubject().getWord(),
-                        wordService.getVerb().getWord(),
-                        wordService.getArticle().getWord(),
-                        wordService.getAdjective().getWord(),
-                        wordService.getNoun().getWord()
+                        wordService.getSubject().getString(),
+                        wordService.getVerb().getString(),
+                        wordService.getArticle().getString(),
+                        wordService.getAdjective().getString(),
+                        wordService.getNoun().getString()
                 );
         return sentence;
     }
